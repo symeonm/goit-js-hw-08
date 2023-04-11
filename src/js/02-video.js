@@ -11,8 +11,8 @@ player.on('timeupdate', throttle ((data) => {
 localStorage.setItem(LOCALSTORAGE_KEY, data.seconds)}, 1000))
     
 
-const getSecond = localStorage.getItem(LOCALSTORAGE_KEY)
-const value = JSON.parse(getSecond)
+const getSecond = localStorage.getItem(LOCALSTORAGE_KEY);
+const value = JSON.parse(getSecond);
 
 
 player.setCurrentTime(value);
