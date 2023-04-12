@@ -2,31 +2,22 @@ import throttle from "lodash.throttle";
 
 const form = document.querySelector('.feedback-form');
 const KEY_STORAGE = "feedback-form-state";
-const input = document.querySelector('input');
-const textarea = document.querySelector('textarea');
 
 
-const object = {};
-
-input.addEventListener('input', throttle ((onInput), 500));
+const object = JSON.parse(localStorage.getItem(KEY_STORAGE))||{};
 
 
-function onInput (){
- object.email = this.value;
- localStorage.setItem(KEY_STORAGE, JSON.stringify(object));
-//  download.ipt = JSON.parse(localStorage.getItem(KEY_STORAGE))
- 
+form.addEventListener('input', throttle ((onInput), 500));
+
+
+function onInput (evt){
+    const emailValue = form.email.value;
+    const messageValue = form.message.value;
+    object.email = emailValue;
+    object.message = messageValue;
+    localStorage.setItem(KEY_STORAGE, JSON.stringify(object))
 };
 
-
-textarea.addEventListener('input', throttle ((onTextarea), 500));
-
-function onTextarea(){
-    object.message = this.value;
-    localStorage.setItem(KEY_STORAGE, JSON.stringify(object));
-    // download.text = JSON.parse(localStorage.getItem(KEY_STORAGE))
-    
-};
 
 
 form.addEventListener('submit', onButton);
@@ -35,16 +26,17 @@ form.addEventListener('submit', onButton);
         evt.preventDefault();
         console.log(object); 
         localStorage.clear();
-        input.value = '';
-        textarea.value = '';
+        form.email.value = '';
+        form.message.value = '';
         
     };
 
 function downloadPage(){
-    if (JSON.parse(localStorage.getItem(KEY_STORAGE))) {
-        const download = JSON.parse(localStorage.getItem(KEY_STORAGE));
-    input.value = download.email;
-    textarea.value = download.message;
+    if(object){
+    form.email.value = object.email || '';
+    form.message.value = object.message || '';
+    } else {
+        alert ('Заповніть поля')
     }
     
 } 
